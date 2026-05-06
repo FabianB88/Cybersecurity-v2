@@ -86,6 +86,7 @@ Productie stopt. Minder risico.
 - Use TBK tags to connect gameplay to the workshop: `Productiecontinuiteit`, `Ketenafhankelijkheid`, `Leveranciersmanagement`, `Interne controle`, `Business continuity`.
 - If content is still placeholder, keep the structure stable and replace only text fields.
 - Write every consequence as: immediate event, operational effect, new uncertainty.
+- Treat workarounds as tradeoffs. If a choice sounds practical in the moment, give it broader effects elsewhere: manual work creates traceability and rework costs, waiting creates communication and trust costs, legal-only routes create operational delay, and local optimization can hurt the chain.
 - Stronger future content should add more forks: choices can point to different `next` nodes, so one scenario can have separate branches for early isolation, risky continuation, legal escalation or operational compromise.
 
 ## Collapse / fail-state

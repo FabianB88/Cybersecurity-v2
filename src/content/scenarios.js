@@ -152,7 +152,7 @@ export const scenarios = [
         choices: [
           choice('A', 'Ketenupdate organiseren', 'Stuur vaste updates naar kritieke klanten en leveranciers met scenario, impact en volgende update.', q.best, 'restart', { proces: 2 }, { reputation: 0, chain: 0, trust: 1, pressure: -1 }, 'De keten krijgt een ritme. Niemand heeft volledige zekerheid, maar partners kunnen plannen op basis van dezelfde informatie.'),
           choice('B', 'Alleen grootste klant', 'Richt alle communicatie op BMW en laat kleinere ketenpartners wachten.', q.acceptable, 'restart', { proces: 1, mens: 1 }, { reputation: 1, chain: 1, trust: -1 }, 'Commercieel begrijpelijk, maar kleinere partners krijgen onzekerheid doorgeschoven. Dat kan later alsnog terugkomen.'),
-          choice('C', 'Niets delen buiten contract', 'Deel alleen informatie als contractueel verplicht.', q.risky, 'restart', { proces: 2 }, { reputation: 2, chain: 2, legal: 1, trust: -2 }, 'Juridisch voorzichtig, maar operationeel schadelijk. Partners gaan eigen noodscenario’s activeren zonder jouw input.'),
+          choice('C', 'Niets delen buiten contract', 'Deel alleen informatie als contractueel verplicht.', q.risky, 'restart', { proces: 2 }, { reputation: 2, chain: 2, legal: 1, trust: -2 }, 'Juridisch voorzichtig, maar operationeel schadelijk. Partners gaan eigen noodscenario\'s activeren zonder jouw input.'),
         ],
       },
       {
@@ -234,9 +234,9 @@ export const scenarios = [
         situation: 'Vijf schepen wachten. Zonder systeem is gevaarlijke lading niet betrouwbaar te lokaliseren.',
         question: 'Wat doe je met de terminal?',
         choices: [
-          choice('A', 'Sluit de terminal', 'Stop de operatie tot duidelijk is wat veilig kan.', q.best, 'priority', { proces: 2, tech: 1 }, { operation: 2, reputation: 0, financial: 1 }, 'Schepen worden omgeleid, maar veiligheidsrisico blijft beheersbaar.'),
-          choice('B', 'Alles handmatig', 'Laat teams met manifesten en Excel doorwerken.', q.risky, 'priority', { proces: 2, tech: 1 }, { operation: 2, reputation: 2, financial: 1 }, 'Er ontstaan verschillende versies van de waarheid.'),
-          choice('C', 'Alleen veilige lading', 'Accepteer tijdelijk alleen niet-gevaarlijke lading.', q.acceptable, 'priority', { proces: 1, tech: 1 }, { operation: 1, reputation: 0, financial: 1 }, 'Een compromis: minder capaciteit, maar minder veiligheidsrisico.'),
+          choice('A', 'Sluit de terminal', 'Stop de operatie tot duidelijk is wat veilig kan.', q.best, 'priority', { proces: 2, tech: 1 }, { operation: 2, reputation: 0, financial: 1, chain: 1, recovery: 1, pressure: 1 }, 'Schepen worden omgeleid en wachttijden lopen op, maar gevaarlijke lading blijft traceerbaar. Je koopt tijd om de operatie gecontroleerd kleiner te maken in plaats van blind door te draaien.'),
+          choice('B', 'Alles handmatig', 'Laat teams met manifesten en Excel doorwerken.', q.risky, 'priority', { proces: 2, tech: 1 }, { operation: 3, reputation: 2, financial: 2, legal: 1, chain: 2, recovery: -1, pressure: 2 }, 'De kade lijkt weer te bewegen, maar er ontstaan verschillende versies van de waarheid. Douane, planners en vervoerders werken met andere lijsten, waardoor herstel later begint met reconciliatie in plaats van doorstroming.'),
+          choice('C', 'Alleen veilige lading', 'Accepteer tijdelijk alleen niet-gevaarlijke lading.', q.acceptable, 'priority', { proces: 1, tech: 1 }, { operation: 2, reputation: 0, financial: 1, chain: 1, recovery: 0, pressure: 1 }, 'Een deel van de terminal blijft bruikbaar, maar capaciteit wordt schaars. Klanten met gevaarlijke of tijdkritische lading moeten omplannen en je team moet scherp bewaken dat uitzonderingen niet alsnog door de poort glippen.'),
         ],
       },
       {
@@ -247,8 +247,8 @@ export const scenarios = [
         question: 'Welke lading krijgt prioriteit?',
         choices: [
           choice('A', 'Kritieke lading eerst', 'Medische, bederfelijke en veiligheidskritieke lading krijgen voorrang.', q.best, 'recovery', { proces: 1, mens: 0 }, { operation: 0, reputation: 0, financial: 0 }, 'Capaciteit wordt gekoppeld aan maatschappelijke en operationele impact.'),
-          choice('B', 'Hardste klant eerst', 'Geef voorrang aan klanten die escaleren.', q.risky, 'recovery', { mens: 1, proces: 2 }, { operation: 1, reputation: 2, financial: 1 }, 'Je beloont druk in plaats van impact.'),
-          choice('C', 'First-in-first-out', 'Volg de normale volgorde ondanks het incident.', q.acceptable, 'recovery', { proces: 1, tech: 0 }, { operation: 1, reputation: 0, financial: 1 }, 'Eerlijk, maar niet altijd bedrijfskundig verstandig.'),
+          choice('B', 'Hardste klant eerst', 'Geef voorrang aan klanten die escaleren.', q.risky, 'recovery', { mens: 1, proces: 2 }, { operation: 2, reputation: 2, financial: 1, chain: 2, trust: -1, pressure: 2 }, 'Je beloont druk in plaats van impact. Stille maar kritieke zendingen blijven liggen, waardoor later nieuwe escalaties ontstaan bij klanten die juist afhankelijk waren van voorspelbare prioritering.'),
+          choice('C', 'First-in-first-out', 'Volg de normale volgorde ondanks het incident.', q.acceptable, 'recovery', { proces: 1, tech: 0 }, { operation: 1, reputation: 1, financial: 1, chain: 1, pressure: 1 }, 'Het voelt eerlijk en uitlegbaar, maar het incident is geen normale wachtrij. Medische, bederfelijke of veiligheidskritieke lading kan achter minder urgente containers blijven steken.'),
         ],
       },
       {
@@ -259,7 +259,7 @@ export const scenarios = [
         question: 'Wat prioriteer je?',
         choices: [
           choice('A', 'Globaal herstel', 'Begin wereldwijd herstel zodra de data beschikbaar is.', q.best, 'lesson', { proces: 1, tech: 1 }, { operation: 0, reputation: 0, financial: 0 }, 'Het hele netwerk komt sneller terug.'),
-          choice('B', 'Rotterdam eerst', 'Wacht op een lokale kopie zodat Rotterdam sneller herstelt.', q.acceptable, 'lesson', { proces: 1, tech: 0 }, { operation: 1, reputation: 0, financial: 1 }, 'Lokaal aantrekkelijk, maar vertraagt de keten.'),
+          choice('B', 'Rotterdam eerst', 'Wacht op een lokale kopie zodat Rotterdam sneller herstelt.', q.acceptable, 'lesson', { proces: 1, tech: 0 }, { operation: 1, reputation: 1, financial: 1, chain: 2, recovery: -1, pressure: 1 }, 'Lokaal aantrekkelijk, maar de keten herstelt niet per haven. Andere terminals blijven wachten op dezelfde netwerkdata en Rotterdam krijgt later alsnog terugslag van wereldwijde vertraging.'),
         ],
       },
       {
@@ -306,8 +306,8 @@ export const scenarios = [
         question: 'Wat moet als eerste gebeuren?',
         choices: [
           choice('A', 'Noodprocedure activeren', 'Schakel over naar vooraf geoefende downtime-procedure.', q.best, 'supplier', { proces: 2, tech: 1 }, { operation: 1, reputation: 0, financial: 0 }, 'Zorg kan gecontroleerd doorgaan.'),
-          choice('B', 'Wachten op leverancier', 'Wacht op een update van de softwareleverancier.', q.risky, 'supplier', { proces: 2, tech: 1 }, { operation: 3, reputation: 1, financial: 1 }, 'Teams improviseren en informatie raakt versnipperd.'),
-          choice('C', 'Alle afspraken annuleren', 'Stop alle niet-acute zorg direct.', q.acceptable, 'supplier', { proces: 1 }, { operation: 2, reputation: 1, financial: 1 }, 'Veilig, maar mogelijk te grof zonder triage.'),
+          choice('B', 'Wachten op leverancier', 'Wacht op een update van de softwareleverancier.', q.risky, 'supplier', { proces: 2, tech: 1 }, { operation: 3, reputation: 1, financial: 1, legal: 1, trust: -1, recovery: -1, pressure: 2 }, 'De keuze lijkt rustig, maar de afdelingen gaan zelf improviseren. Medicatie-informatie raakt versnipperd, verpleegkundigen bouwen eigen lijstjes en de leverancier bepaalt feitelijk het tempo van het zorgproces.'),
+          choice('C', 'Alle afspraken annuleren', 'Stop alle niet-acute zorg direct.', q.acceptable, 'supplier', { proces: 1 }, { operation: 3, reputation: 1, financial: 2, chain: 1, recovery: 0, pressure: 1 }, 'Veilig, maar grof. Acute risico\'s dalen, terwijl poli\'s, OK-planning en doorverwijzingen nieuwe achterstanden opbouwen die later opnieuw getrieerd moeten worden.'),
         ],
       },
       {
@@ -317,8 +317,8 @@ export const scenarios = [
         situation: 'De leverancier geeft geen duidelijke hersteltijd. Afdelingen bellen zelf rond.',
         question: 'Hoe organiseer je informatie?',
         choices: [
-          choice('A', 'Centraal crisiskanaal', 'Een crisisteam communiceert vaste updates naar alle afdelingen.', q.best, 'data', { proces: 2 }, { operation: 0, reputation: 0, financial: 0 }, 'Er komt een enkele bron van waarheid.'),
-          choice('B', 'Afdelingen zelf laten bellen', 'Laat ieder team direct schakelen met de leverancier.', q.risky, 'data', { mens: 1, proces: 2 }, { operation: 2, reputation: 1, financial: 0 }, 'De leverancier wordt overspoeld en afdelingen krijgen verschillende antwoorden.'),
+          choice('A', 'Centraal crisiskanaal', 'Een crisisteam communiceert vaste updates naar alle afdelingen.', q.best, 'data', { proces: 2 }, { operation: 0, reputation: 0, financial: 0, trust: 1, pressure: -1 }, 'Er komt een enkele bron van waarheid. Niet elke afdeling krijgt meteen het antwoord dat zij wil, maar beslissingen worden gebaseerd op dezelfde status.'),
+          choice('B', 'Afdelingen zelf laten bellen', 'Laat ieder team direct schakelen met de leverancier.', q.risky, 'data', { mens: 1, proces: 2 }, { operation: 2, reputation: 1, financial: 1, trust: -1, recovery: -1, pressure: 2 }, 'De leverancier wordt overspoeld en afdelingen krijgen verschillende antwoorden. Het lijkt snel omdat iedereen handelt, maar niemand weet meer welke informatie leidend is.'),
         ],
       },
       {
@@ -377,8 +377,8 @@ export const scenarios = [
         question: 'Wat communiceer je eerst?',
         choices: [
           choice('A', 'Geld en data veilig', 'Leg uit dat beschikbaarheid geraakt is, niet saldo of klantdata.', q.best, 'capacity', { mens: 0, proces: 1, tech: 0 }, { reputation: 0, operation: 0, financial: 0 }, 'Paniek neemt af en klantenservice wordt ontlast.'),
-          choice('B', 'Technisch detail', 'Publiceer vooral technische informatie over de aanval.', q.acceptable, 'capacity', { tech: 1 }, { reputation: 1, operation: 0, financial: 0 }, 'Transparant, maar veel klanten begrijpen niet wat het betekent.'),
-          choice('C', 'Geen commentaar', 'Wacht tot alle feiten bekend zijn.', q.risky, 'capacity', { mens: 1, proces: 2 }, { reputation: 2, operation: 1, financial: 0 }, 'Geruchten vullen het communicatiegat.'),
+          choice('B', 'Technisch detail', 'Publiceer vooral technische informatie over de aanval.', q.acceptable, 'capacity', { tech: 1 }, { reputation: 1, operation: 1, financial: 0, pressure: 1 }, 'Transparant, maar veel klanten begrijpen niet wat het betekent. Klantenservice krijgt extra vragen omdat de boodschap technisch klopt maar het concrete klantprobleem niet oplost.'),
+          choice('C', 'Geen commentaar', 'Wacht tot alle feiten bekend zijn.', q.risky, 'capacity', { mens: 1, proces: 2 }, { reputation: 2, operation: 1, financial: 0, trust: -1, pressure: 2 }, 'Geruchten vullen het communicatiegat. De bank lijkt afwezig op het moment dat klanten juist bevestiging zoeken dat saldo en data veilig zijn.'),
         ],
       },
       {
@@ -388,9 +388,9 @@ export const scenarios = [
         situation: 'De DDoS-leverancier zit tegen capaciteitsgrenzen aan.',
         question: 'Wat doe je bij toenemende aanvalsgrootte?',
         choices: [
-          choice('A', 'Extra capaciteit inkopen', 'Koop tijdelijk extra bescherming in.', q.acceptable, 'dependency', { tech: 1, proces: 1 }, { financial: 1, operation: 0, reputation: 0 }, 'Duur, maar verlaagt directe uitval.'),
+          choice('A', 'Extra capaciteit inkopen', 'Koop tijdelijk extra bescherming in.', q.acceptable, 'dependency', { tech: 1, proces: 1 }, { financial: 2, operation: 0, reputation: 0, chain: 1, recovery: 0, pressure: 1 }, 'De directe uitval daalt, maar je koopt vooral tijd binnen dezelfde afhankelijkheid. Contracten, routing en monitoring moeten onder druk worden aangepast en de volgende piek kan opnieuw om meer capaciteit vragen.'),
           choice('B', 'Tweede leverancier activeren', 'Schakel een noodroute via een tweede leverancier in.', q.best, 'dependency', { proces: 2, tech: 1 }, { financial: 1, operation: 0, reputation: 0 }, 'Complexer, maar vermindert afhankelijkheid van een punt.'),
-          choice('C', 'Afwachten', 'Accepteer het risico omdat extra capaciteit duur is.', q.risky, 'dependency', { proces: 2, tech: 1 }, { financial: 1, operation: 2, reputation: 2 }, 'Een nieuwe piek leidt tot extra uitval.'),
+          choice('C', 'Afwachten', 'Accepteer het risico omdat extra capaciteit duur is.', q.risky, 'dependency', { proces: 2, tech: 1 }, { financial: 1, operation: 3, reputation: 2, chain: 1, trust: -1, pressure: 2 }, 'De kosten blijven vandaag lager, maar een nieuwe piek leidt tot extra uitval. Klantenservice krijgt de rekening in vragen, klachten en onzekerheid over betaaldiensten.'),
         ],
       },
       {
@@ -401,8 +401,8 @@ export const scenarios = [
         question: 'Welke structurele maatregel adviseer je?',
         choices: [
           choice('A', 'Diversificatie', 'Werk met meerdere beschermingslagen en leveranciers.', q.best, 'end_scenario', { proces: 2, tech: 1 }, { operation: 0, reputation: 0, financial: 0 }, 'Minder afhankelijk van een enkele partij.'),
-          choice('B', 'Alleen klantvoorlichting', 'Leg klanten beter uit wat een DDoS is.', q.acceptable, 'end_scenario', { mens: 1, proces: 0 }, { operation: 0, reputation: 0, financial: 0 }, 'Helpt vertrouwen, maar lost technische afhankelijkheid niet op.'),
-          choice('C', 'Alleen intern monitoren', 'Investeer vooral in extra dashboards.', q.risky, 'end_scenario', { tech: 1, proces: 1 }, { operation: 1, reputation: 0, financial: 1 }, 'Je ziet problemen sneller, maar kan ze niet altijd opvangen.'),
+          choice('B', 'Alleen klantvoorlichting', 'Leg klanten beter uit wat een DDoS is.', q.acceptable, 'end_scenario', { mens: 1, proces: 0 }, { operation: 1, reputation: 0, financial: 0, trust: 1 }, 'Helpt vertrouwen en verlaagt paniek, maar de technische afhankelijkheid blijft bestaan. Bij de volgende aanval kun je beter uitleggen waarom klanten vastlopen, niet voorkomen dat ze vastlopen.'),
+          choice('C', 'Alleen intern monitoren', 'Investeer vooral in extra dashboards.', q.risky, 'end_scenario', { tech: 1, proces: 1 }, { operation: 2, reputation: 1, financial: 1, recovery: -1, pressure: 1 }, 'Je ziet problemen sneller, maar kunt ze niet altijd opvangen. Monitoring zonder alternatieve route verandert incidenten in beter gedocumenteerde uitval.'),
         ],
       },
     ],
@@ -437,7 +437,7 @@ export const scenarios = [
         question: 'Wat doe je met het account?',
         choices: [
           choice('A', 'Direct blokkeren', 'Blokkeer het account en bel de leverancier via bekend nummer.', q.best, 'supplier', { proces: 2, tech: 1 }, { operation: 1, reputation: 0, financial: 0 }, 'De export stopt vroeg en verificatie loopt via betrouwbaar kanaal.'),
-          choice('B', 'Limiet zetten', 'Sta export toe tot een hogere limiet en monitor.', q.acceptable, 'supplier', { proces: 1, tech: 1 }, { operation: 0, reputation: 1, financial: 0 }, 'Minder verstoring, maar meer data kan buitenkomen.'),
+          choice('B', 'Limiet zetten', 'Sta export toe tot een hogere limiet en monitor.', q.acceptable, 'supplier', { proces: 1, tech: 1 }, { operation: 0, reputation: 1, financial: 1, legal: 1, recovery: -1, pressure: 1 }, 'De migratie wordt minder verstoord, maar je accepteert extra databeweging terwijl de oorzaak onzeker is. Als het misbruik blijkt, is de schade groter en moet je uitleggen waarom de kraan niet dichtging.'),
           choice('C', 'Mail sturen', 'Vraag per mail of de export klopt.', q.risky, 'supplier', { mens: 1, proces: 2 }, { operation: 0, reputation: 2, financial: 1 }, 'Als het account overgenomen is, praat je mogelijk met de aanvaller.'),
         ],
       },
@@ -450,7 +450,7 @@ export const scenarios = [
         choices: [
           choice('A', 'Documentatie eisen', 'Vraag schriftelijke projectautorisatie en laat CISO meekijken.', q.best, 'avg', { proces: 2 }, { operation: 0, reputation: 0, financial: 0 }, 'Zakelijke druk wordt gescheiden van securitybesluitvorming.'),
           choice('B', 'Deblokkeren', 'Herstel toegang omdat de uitleg plausibel klinkt.', q.risky, 'avg', { mens: 1, proces: 2 }, { reputation: 2, financial: 1, operation: 0 }, 'Vertrouwen vervangt bewijs.'),
-          choice('C', 'Alles naar legal', 'Wacht tot juridisch advies klaar is.', q.acceptable, 'avg', { proces: 1 }, { operation: 1, reputation: 1, financial: 0 }, 'Zorgvuldig, maar security-actie mag niet stilvallen.'),
+          choice('C', 'Alles naar legal', 'Wacht tot juridisch advies klaar is.', q.acceptable, 'avg', { proces: 1 }, { operation: 1, reputation: 1, financial: 0, legal: 0, recovery: -1, pressure: 1 }, 'Zorgvuldig, maar security-actie mag niet stilvallen. Terwijl legal formuleert, blijft operationeel onduidelijk wie toegang mag herstellen, welke data geraakt is en wanneer de meldklok start.'),
         ],
       },
       {
@@ -462,7 +462,7 @@ export const scenarios = [
         choices: [
           choice('A', 'Melden met onzekerheid', 'Meld bij de AP met wat bekend is en vul later aan.', q.best, 'lesson', { proces: 2 }, { reputation: 0, financial: 0, operation: 0 }, 'De wettelijke klok wordt serieus genomen.'),
           choice('B', 'Wachten op perfect rapport', 'Meld pas als alle forensische details rond zijn.', q.risky, 'lesson', { proces: 2 }, { reputation: 2, financial: 2, operation: 0 }, 'Volledigheid kan te laat komen.'),
-          choice('C', 'Klanten eerst, AP later', 'Informeer klanten direct en meld daarna formeel.', q.acceptable, 'lesson', { proces: 1, mens: 1 }, { reputation: 1, financial: 0, operation: 0 }, 'Transparant, maar volgorde en feiten moeten strak worden bewaakt.'),
+          choice('C', 'Klanten eerst, AP later', 'Informeer klanten direct en meld daarna formeel.', q.acceptable, 'lesson', { proces: 1, mens: 1 }, { reputation: 1, financial: 0, operation: 0, legal: 1, pressure: 1 }, 'Transparant, maar volgorde en feiten moeten strak worden bewaakt. Als klanten eerder andere details horen dan de toezichthouder, ontstaat extra uitlegwerk en compliance-druk.'),
         ],
       },
       {
@@ -510,7 +510,7 @@ export const scenarios = [
         choices: [
           choice('A', 'Tweede kanaal', 'Bel het hoofdkantoor via een bekend officieel nummer.', q.best, 'discover', { mens: 1, proces: 2 }, { operation: 0, reputation: 0, financial: 0 }, 'Fraude wordt ontdekt voordat geld vertrekt.'),
           choice('B', 'Betalen', 'Betaal omdat de vraag urgent en vertrouwelijk is.', q.risky, 'second', { mens: 2, proces: 2 }, { financial: 3, reputation: 1, operation: 0 }, 'De eerste betaling verdwijnt en de fraudeur komt terug.'),
-          choice('C', 'Mail terug', 'Vraag extra informatie via dezelfde mailthread.', q.acceptable, 'second', { mens: 1, proces: 1 }, { financial: 1, reputation: 0, operation: 0 }, 'Je zoekt bewijs, maar bij de verkeerde partij.'),
+          choice('C', 'Mail terug', 'Vraag extra informatie via dezelfde mailthread.', q.acceptable, 'second', { mens: 1, proces: 1 }, { financial: 1, reputation: 0, operation: 0, trust: -1, pressure: 1 }, 'Je zoekt bewijs, maar bij de verkeerde partij. De fraudeur krijgt tijd om geloofwaardiger te reageren en jouw twijfel wordt onderdeel van zijn script.'),
         ],
       },
       {
@@ -521,7 +521,7 @@ export const scenarios = [
         question: 'Wat is de juiste vervolgstap?',
         choices: [
           choice('A', 'Melden en vastleggen', 'Informeer bestuur, bank en politie; bewaar bewijs.', q.best, 'lesson', { proces: 1 }, { financial: 0, reputation: 0, operation: 0 }, 'Snel melden helpt detectie en voorkomt vervolgschade.'),
-          choice('B', 'Stil intern uitzoeken', 'Onderzoek eerst zelf wat er gebeurd is.', q.acceptable, 'lesson', { proces: 1 }, { operation: 1, reputation: 0, financial: 0 }, 'Begrijpelijk, maar waarschuwingen komen later.'),
+          choice('B', 'Stil intern uitzoeken', 'Onderzoek eerst zelf wat er gebeurd is.', q.acceptable, 'lesson', { proces: 1 }, { operation: 1, reputation: 1, financial: 0, recovery: -1, pressure: 1 }, 'Begrijpelijk, maar waarschuwingen komen later. Bank en bestuur missen vroege signalen, waardoor vervolgschade minder snel geblokkeerd kan worden.'),
         ],
       },
       {
@@ -533,7 +533,7 @@ export const scenarios = [
         choices: [
           choice('A', 'Stop en bel', 'Weiger betaling tot verificatie via officieel kanaal is gelukt.', q.best, 'lesson', { mens: 1, proces: 2 }, { financial: 0, reputation: 0, operation: 0 }, 'De schade stopt en het patroon wordt zichtbaar.'),
           choice('B', 'Doorgaan', 'Betaal omdat stoppen vreemd voelt na de eerste betaling.', q.risky, 'lesson', { mens: 2, proces: 2 }, { financial: 3, reputation: 2, operation: 0 }, 'Sunk cost-denken vergroot de schade.'),
-          choice('C', 'Videobel vragen', 'Vraag de CEO om mondelinge bevestiging.', q.acceptable, 'lesson', { mens: 1, proces: 1 }, { financial: 1, reputation: 0, operation: 0 }, 'Een goed signaal, maar alleen veilig als je het kanaal zelf initieert.'),
+          choice('C', 'Videobel vragen', 'Vraag de CEO om mondelinge bevestiging.', q.acceptable, 'lesson', { mens: 1, proces: 1 }, { financial: 1, reputation: 0, operation: 0, pressure: 1 }, 'Een goed signaal, maar alleen veilig als je het kanaal zelf initieert. Als je het gesprek via de bestaande mailthread laat regelen, kan de aanvaller de verificatie alsnog sturen.'),
         ],
       },
       {
