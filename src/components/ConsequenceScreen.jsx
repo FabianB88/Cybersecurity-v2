@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Activity, Banknote, Building2, FileWarning, Network, Radio, TimerReset } from 'lucide-react'
+import { ArrowRight, Activity, Banknote, Building2, FileCheck2, FileWarning, Network, Radio, TimerReset } from 'lucide-react'
 import LiveRiskPanel from './LiveRiskPanel.jsx'
 import { calculateLiveProgress, getRiskLevel, getScenarioRecap } from '../engine/progressEngine.js'
 
@@ -39,14 +39,14 @@ export default function ConsequenceScreen({ outcome, state, onContinue }) {
 
   return (
     <motion.section
-      className="screen consequence-screen"
+      className={`screen consequence-screen ${outcome.isScenarioEnd || outcome.collapsed ? 'scenario-finished' : ''}`}
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -18 }}
     >
       <div className="consequence-layout">
       <LiveRiskPanel state={state} />
-      <article className="consequence-card">
+      <article className={`consequence-card ${outcome.isScenarioEnd || outcome.collapsed ? 'scenario-finished-card' : ''}`}>
         <div className="node-eyebrow"><Radio size={15} /> Gevolg van je actie</div>
         <h2>{outcome.nodeTitle}</h2>
         <div className="chosen-action">
@@ -115,32 +115,34 @@ function DossierDebrief({ outcome, state, values, level }) {
   const theory = outcome.scenarioReflection || {}
 
   return (
-    <div className="dossier-debrief">
-      <span>Dossierdebrief</span>
-      <h3>Wat is er in dit bedrijf gebeurd?</h3>
-      <p>{theory.summary || 'Je keuzes hebben het incident richting gegeven. Sommige keuzes beperkten verspreiding; andere vergrootten druk, schade of onzekerheid.'}</p>
+    <div className={`dossier-debrief ${outcome.collapsed ? 'collapse' : level.className}`}>
+      <div className="debrief-hero">
+        <span><FileCheck2 size={16} /> Eindrapport scenario</span>
+        <h3>{outcome.collapsed ? outcome.collapseTitle : `Dossier ${outcome.scenarioTitle} afgerond`}</h3>
+        <p>{outcome.collapsed ? outcome.collapseText : theory.summary || 'Je keuzes hebben het incident richting gegeven. Sommige keuzes beperkten verspreiding; andere vergrootten druk, schade of onzekerheid.'}</p>
+      </div>
 
       <div className="debrief-grid">
-        <div>
+        <div className="debrief-tile primary">
           <strong>Risiconiveau</strong>
           <p>{level.label}: {level.text}</p>
         </div>
-        <div>
+        <div className="debrief-tile">
           <strong>CIA-koppeling</strong>
           <p>{theory.cia || `Dit dossier raakt vooral ${outcome.scenarioCia?.join(' en ')}.`}</p>
         </div>
-        <div>
+        <div className="debrief-tile">
           <strong>TBK-bril</strong>
           <p>{theory.tbk || `Kijk naar ${outcome.scenarioLens}: welk proces, welke afhankelijkheid en welke maatregel zijn bedrijfskundig relevant?`}</p>
         </div>
       </div>
 
       <div className="debrief-grid">
-        <div>
+        <div className="debrief-tile">
           <strong>Waar zit de pijn?</strong>
           <p>Operatie {values.operation}, keten {values.chain}, reputatie {values.reputation}, juridisch {values.legal}, financieel {values.financial}.</p>
         </div>
-        <div>
+        <div className="debrief-tile">
           <strong>Waar zit veerkracht?</strong>
           <p>Herstelvermogen {values.recovery}, vertrouwen {values.trust}. Een hoog herstelvermogen kan tijdelijke schade acceptabel maken.</p>
         </div>
