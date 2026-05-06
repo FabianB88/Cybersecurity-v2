@@ -45,6 +45,8 @@ Each node is one decision screen.
 }
 ```
 
+Every node automatically receives clickable dossier cards based on scenario metadata and `tbkTags`. Later, this can be made more specific by adding a `dossier` array to a node; the UI is already built around the concept of students opening information before choosing.
+
 ## Choice structure
 
 Choices control branching and the final profile.
@@ -62,6 +64,20 @@ choice(
 )
 ```
 
+After every choice, the app now shows a consequence scene before moving on. The `consequence` field should therefore be written as a short story result, not as a one-line score note.
+
+Good consequence style:
+
+```text
+De productievloer valt stil. Binnen twintig minuten staat BMW opnieuw aan de lijn, maar IT meldt dat de besmetting zich niet verder verspreidt. Je hebt omzet verloren, maar het incident blijft begrensd.
+```
+
+Weak consequence style:
+
+```text
+Productie stopt. Minder risico.
+```
+
 ## Rules for editing
 
 - Keep every node `id` unique inside a scenario.
@@ -69,6 +85,8 @@ choice(
 - Use `q.best`, `q.acceptable` and `q.risky`; avoid hard right/wrong thinking.
 - Use TBK tags to connect gameplay to the workshop: `Productiecontinuiteit`, `Ketenafhankelijkheid`, `Leveranciersmanagement`, `Interne controle`, `Business continuity`.
 - If content is still placeholder, keep the structure stable and replace only text fields.
+- Write every consequence as: immediate event, operational effect, new uncertainty.
+- Stronger future content should add more forks: choices can point to different `next` nodes, so one scenario can have separate branches for early isolation, risky continuation, legal escalation or operational compromise.
 
 ## Images
 

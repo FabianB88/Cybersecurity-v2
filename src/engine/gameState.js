@@ -8,6 +8,7 @@ const initialState = {
   choices: {},
   nodeHistory: [],
   consequenceLog: [],
+  pendingOutcome: null,
 }
 
 export function useGameState(scenarios) {
@@ -34,6 +35,9 @@ export function useGameState(scenarios) {
     const scenario = scenarios[state.currentScenarioIndex]
     const node = scenario.nodes.find((item) => item.id === state.currentNodeId)
     const choice = node.choices.find((item) => item.id === choiceId)
+    const nextNode = choice.next === 'end_scenario'
+      ? null
+      : scenario.nodes.find((item) => item.id === choice.next)
     const key = `${scenario.id}:${node.id}`
     const historyEntry = {
       scenarioId: scenario.id,
@@ -59,16 +63,38 @@ export function useGameState(scenarios) {
       },
     ]
 
-    if (choice.next === 'end_scenario') {
+    setState((current) => ({
+      ...current,
+      screen: 'consequence',
+      choices: nextChoices,
+      nodeHistory: nextHistory,
+      consequenceLog: nextLog,
+      pendingOutcome: {
+        scenarioId: scenario.id,
+        scenarioTitle: scenario.title,
+        nodeId: node.id,
+        nodeTitle: node.title,
+        choice,
+        nextNodeId: choice.next,
+        nextNodeTitle: nextNode?.title || null,
+        nextSituation: nextNode?.situation || null,
+        isScenarioEnd: choice.next === 'end_scenario',
+      },
+    }))
+  }
+
+  function continueAfterConsequence() {
+    const outcome = state.pendingOutcome
+    if (!outcome) return
+
+    if (outcome.nextNodeId === 'end_scenario') {
       if (state.currentScenarioIndex < scenarios.length - 1) {
         setState((current) => ({
           ...current,
           screen: 'intro',
           currentScenarioIndex: current.currentScenarioIndex + 1,
           currentNodeId: scenarios[current.currentScenarioIndex + 1].nodes[0].id,
-          choices: nextChoices,
-          nodeHistory: nextHistory,
-          consequenceLog: nextLog,
+          pendingOutcome: null,
         }))
         return
       }
@@ -76,9 +102,7 @@ export function useGameState(scenarios) {
       setState((current) => ({
         ...current,
         screen: 'end',
-        choices: nextChoices,
-        nodeHistory: nextHistory,
-        consequenceLog: nextLog,
+        pendingOutcome: null,
       }))
       return
     }
@@ -86,10 +110,8 @@ export function useGameState(scenarios) {
     setState((current) => ({
       ...current,
       screen: 'node',
-      currentNodeId: choice.next,
-      choices: nextChoices,
-      nodeHistory: nextHistory,
-      consequenceLog: nextLog,
+      currentNodeId: outcome.nextNodeId,
+      pendingOutcome: null,
     }))
   }
 
@@ -97,5 +119,5 @@ export function useGameState(scenarios) {
     setState(initialState)
   }
 
-  return { state, startGame, finishOnboarding, finishIntro, makeChoice, restart }
+  return { state, startGame, finishOnboarding, finishIntro, makeChoice, continueAfterConsequence, restart }
 }
