@@ -16,7 +16,7 @@ export default function App() {
 
   return (
     <main className="app-shell">
-      <SwirlBackground />
+      <SwirlBackground image={scenario?.image} />
       <AnimatePresence mode="wait">
         {game.state.screen === 'start' && (
           <StartScreen key="start" onStart={game.startGame} />

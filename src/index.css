@@ -1540,3 +1540,14 @@ button:disabled {
   .quality-badge.quality-acceptable { color: goldenrod; }
   .quality-badge.quality-risky      { color: red; }
 }
+
+/* Per-scenario background image */
+.swirl-bg-image {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.07;
+  mix-blend-mode: luminosity;
+  transition: background-image 0.8s ease;
+}
