@@ -36,25 +36,34 @@ export function useGameState(scenarios) {
     const scenario = scenarios[state.currentScenarioIndex]
     const node = scenario.nodes.find((item) => item.id === state.currentNodeId)
     const choice = node.choices.find((item) => item.id === choiceId)
-    const nextNode = choice.next === 'end_scenario'
-      ? null
-      : scenario.nodes.find((item) => item.id === choice.next)
+    const nextNode =
+      choice.next === 'end_scenario'
+        ? null
+        : scenario.nodes.find((item) => item.id === choice.next)
     const key = `${scenario.id}:${node.id}`
+
     const historyEntry = {
       scenarioId: scenario.id,
       nodeId: node.id,
+      nodeTitle: node.title,
       choiceId,
       choiceLabel: choice.label,
       quality: choice.quality,
       risk: choice.risk,
       meters: choice.meters,
       tbkTags: node.tbkTags,
+      // Fork support: set forkPoint: true on a node and forkLabel on a choice
+      // to mark this as a meaningful branching moment in the report.
+      isForkPoint: node.forkPoint === true,
+      forkLabel: choice.forkLabel || null,
     }
 
     const nextChoices = { ...state.choices, [key]: choiceId }
     const nextHistory = [...state.nodeHistory, historyEntry]
     const nextValues = calculateLiveProgress(nextHistory)
-    const collapsed = choice.collapse === true || (scenario.allowCollapse !== false && isScenarioCollapse(nextValues))
+    const collapsed =
+      choice.collapse === true ||
+      (scenario.allowCollapse !== false && isScenarioCollapse(nextValues))
     const nextLog = [
       ...state.consequenceLog,
       {
@@ -87,8 +96,12 @@ export function useGameState(scenarios) {
         nextSituation: nextNode?.situation || null,
         isScenarioEnd: choice.next === 'end_scenario',
         collapsed,
-        collapseTitle: choice.collapseTitle || scenario.collapse?.title || 'Het dossier escaleert',
-        collapseText: choice.collapseText || scenario.collapse?.text || 'De opeenstapeling van keuzes heeft het incident buiten beheersbare grenzen geduwd.',
+        collapseTitle:
+          choice.collapseTitle || scenario.collapse?.title || 'Het dossier escaleert',
+        collapseText:
+          choice.collapseText ||
+          scenario.collapse?.text ||
+          'De opeenstapeling van keuzes heeft het incident buiten beheersbare grenzen geduwd.',
       },
     }))
   }

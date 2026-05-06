@@ -48,6 +48,57 @@ export function isScenarioCollapse(values) {
   return level.className === 'critical' || values.operation >= 12 || values.chain >= 10 || values.recovery <= 1
 }
 
+// Groups nodeHistory by scenario and returns per-scenario report data.
+export function buildScenarioReports(state, scenarios) {
+  const byScenario = {}
+  for (const entry of state.nodeHistory) {
+    if (!byScenario[entry.scenarioId]) byScenario[entry.scenarioId] = []
+    byScenario[entry.scenarioId].push(entry)
+  }
+
+  return scenarios
+    .filter((s) => byScenario[s.id])
+    .map((scenario) => {
+      const entries = byScenario[scenario.id]
+      const counts = { best: 0, acceptable: 0, risky: 0 }
+      for (const e of entries) counts[e.quality] = (counts[e.quality] || 0) + 1
+      const score = Math.round(
+        ((counts.best * 2 + counts.acceptable * 1) / (entries.length * 2)) * 100,
+      )
+      const logEntries = state.consequenceLog.filter((l) => l.scenario === scenario.title)
+      return {
+        id: scenario.id,
+        title: scenario.title,
+        sector: scenario.sector,
+        year: scenario.year,
+        entries,
+        counts,
+        score,
+        collapsed: logEntries.some((l) => l.collapsed),
+      }
+    })
+}
+
+// Returns an overall quality verdict across all scenarios.
+export function getOverallVerdict(nodeHistory) {
+  if (!nodeHistory.length) {
+    return { score: 0, verdict: 'Onbekend', label: '', counts: { best: 0, acceptable: 0, risky: 0 } }
+  }
+  const counts = { best: 0, acceptable: 0, risky: 0 }
+  for (const e of nodeHistory) counts[e.quality] = (counts[e.quality] || 0) + 1
+  const score = Math.round(
+    ((counts.best * 2 + counts.acceptable * 1) / (nodeHistory.length * 2)) * 100,
+  )
+  const verdict = score >= 75 ? 'Proactief' : score >= 45 ? 'Reactief' : 'Escalerend'
+  const label =
+    score >= 75
+      ? 'Je kiest structureel voor preventie en escalatiebeheersing.'
+      : score >= 45
+        ? 'Je reageert adequaat, maar mist proactieve controlemomenten.'
+        : 'Je keuzes leiden herhaaldelijk tot escalatie en controleverlies.'
+  return { score, verdict, label, counts }
+}
+
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value))
 }
