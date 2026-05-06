@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { calculateLiveProgress, isScenarioCollapse } from './progressEngine.js'
 
 const initialState = {
   screen: 'start',
@@ -52,6 +53,8 @@ export function useGameState(scenarios) {
 
     const nextChoices = { ...state.choices, [key]: choiceId }
     const nextHistory = [...state.nodeHistory, historyEntry]
+    const nextValues = calculateLiveProgress(nextHistory)
+    const collapsed = choice.collapse === true || (scenario.allowCollapse !== false && isScenarioCollapse(nextValues))
     const nextLog = [
       ...state.consequenceLog,
       {
@@ -60,6 +63,7 @@ export function useGameState(scenarios) {
         label: choice.label,
         consequence: choice.consequence,
         quality: choice.quality,
+        collapsed,
       },
     ]
 
@@ -82,6 +86,9 @@ export function useGameState(scenarios) {
         nextNodeTitle: nextNode?.title || null,
         nextSituation: nextNode?.situation || null,
         isScenarioEnd: choice.next === 'end_scenario',
+        collapsed,
+        collapseTitle: choice.collapseTitle || scenario.collapse?.title || 'Het dossier escaleert',
+        collapseText: choice.collapseText || scenario.collapse?.text || 'De opeenstapeling van keuzes heeft het incident buiten beheersbare grenzen geduwd.',
       },
     }))
   }
@@ -90,7 +97,7 @@ export function useGameState(scenarios) {
     const outcome = state.pendingOutcome
     if (!outcome) return
 
-    if (outcome.nextNodeId === 'end_scenario') {
+    if (outcome.nextNodeId === 'end_scenario' || outcome.collapsed) {
       if (state.currentScenarioIndex < scenarios.length - 1) {
         setState((current) => ({
           ...current,

@@ -16,6 +16,10 @@ const qualityCopy = {
     label: 'Risicovolle afslag',
     text: 'De keuze voelt begrijpelijk onder druk, maar vergroot de kans dat het incident escaleert of later moeilijker te herstellen is.',
   },
+  collapse: {
+    label: 'Crisisuitkomst',
+    text: 'De opeenstapeling van keuzes is niet meer alleen schadebeperking. De organisatie verliest grip en moet overschakelen naar noodbestuur.',
+  },
 }
 
 const meterLabels = {
@@ -29,7 +33,7 @@ const meterLabels = {
 
 export default function ConsequenceScreen({ outcome, state, onContinue }) {
   const { choice } = outcome
-  const quality = qualityCopy[choice.quality] || qualityCopy.acceptable
+  const quality = outcome.collapsed ? qualityCopy.collapse : qualityCopy[choice.quality] || qualityCopy.acceptable
   const values = calculateLiveProgress(state.nodeHistory)
   const level = getRiskLevel(values)
 
@@ -71,14 +75,19 @@ export default function ConsequenceScreen({ outcome, state, onContinue }) {
           })}
         </div>
 
-        <div className={`analysis-box ${choice.quality}`}>
+        <div className={`analysis-box ${outcome.collapsed ? 'collapse' : choice.quality}`}>
           <span>{quality.label}</span>
           <p>{quality.text}</p>
         </div>
 
         <div className="next-briefing">
           <span>Nieuwe situatie</span>
-          {outcome.isScenarioEnd ? (
+          {outcome.collapsed ? (
+            <>
+              <strong>{outcome.collapseTitle}</strong>
+              <p>{outcome.collapseText}</p>
+            </>
+          ) : outcome.isScenarioEnd ? (
             <p>Dit incident is afgerond. Je neemt de les mee naar het volgende dossier.</p>
           ) : (
             <>
@@ -88,7 +97,7 @@ export default function ConsequenceScreen({ outcome, state, onContinue }) {
           )}
         </div>
 
-        {outcome.isScenarioEnd && (
+        {(outcome.isScenarioEnd || outcome.collapsed) && (
           <DossierDebrief outcome={outcome} state={state} values={values} level={level} />
         )}
 

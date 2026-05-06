@@ -88,6 +88,21 @@ Productie stopt. Minder risico.
 - Write every consequence as: immediate event, operational effect, new uncertainty.
 - Stronger future content should add more forks: choices can point to different `next` nodes, so one scenario can have separate branches for early isolation, risky continuation, legal escalation or operational compromise.
 
+## Collapse / fail-state
+
+The engine can now end a scenario badly when the live risk score becomes too high. You can also force a collapse from a specific choice:
+
+```js
+{
+  ...choice(...),
+  collapse: true,
+  collapseTitle: 'Productiecrisis buiten controle',
+  collapseText: 'The board takes over and customers activate emergency suppliers.'
+}
+```
+
+Most of the time, prefer cumulative collapse through bad decisions. That makes the fail-state feel earned instead of arbitrary.
+
 ## Images
 
 Image paths are defined in:

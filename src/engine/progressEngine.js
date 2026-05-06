@@ -43,6 +43,11 @@ export function getRiskLevel(values) {
   return { label: 'Beheerst', className: 'low', text: 'De situatie is gespannen, maar je houdt grip op vervolgschade.' }
 }
 
+export function isScenarioCollapse(values) {
+  const level = getRiskLevel(values)
+  return level.className === 'critical' || values.operation >= 12 || values.chain >= 10 || values.recovery <= 1
+}
+
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value))
 }

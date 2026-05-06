@@ -23,6 +23,10 @@ export const scenarios = [
     accent: '#ff8c00',
     image: imageManifest.vdl,
     sources: ['NOS', 'Omroep Brabant', 'Maakindustrie Nieuws'],
+    collapse: {
+      title: 'Productiecrisis buiten controle',
+      text: 'De combinatie van verspreiding, klantonzekerheid, ketendruk en zwak herstelvermogen is te groot geworden. De board neemt de regie over, productie blijft stil en klanten schakelen noodleveranciers in.',
+    },
     intro: [
       'Donderdag 03:47. De nachtdienst belt: systemen vallen een voor een uit. Om 06:00 staan medewerkers bij de poort en BMW verwacht onderdelen.',
       'Dit scenario draait om productiecontinuiteit: als digitale planning, voorraad en kwaliteitsregistratie uitvallen, staat niet alleen IT stil maar ook de keten.',

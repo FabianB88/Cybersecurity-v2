@@ -1067,6 +1067,11 @@ button:disabled {
   border-left: 3px solid var(--red);
 }
 
+.analysis-box.collapse {
+  border-left: 3px solid var(--red);
+  background: rgba(42, 21, 21, 0.56);
+}
+
 .log-list {
   display: grid;
   gap: 10px;
