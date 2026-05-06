@@ -16,7 +16,8 @@ const resilienceMeters = [
 ]
 
 export default function LiveRiskPanel({ state, compact = false }) {
-  const values = calculateLiveProgress(state.nodeHistory)
+  // Use scenarioHistory (current scenario only) so meters reset between scenarios
+  const values = calculateLiveProgress(state.scenarioHistory ?? state.nodeHistory)
   const level = getRiskLevel(values)
   const max = Math.max(8, ...exposureMeters.map((meter) => values[meter.key]))
 

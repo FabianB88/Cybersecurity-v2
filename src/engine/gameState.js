@@ -7,7 +7,8 @@ const initialState = {
   currentScenarioIndex: 0,
   currentNodeId: 'start',
   choices: {},
-  nodeHistory: [],
+  nodeHistory: [],       // full history across all scenarios (for end report)
+  scenarioHistory: [],   // history for CURRENT scenario only (resets between scenarios)
   consequenceLog: [],
   pendingOutcome: null,
 }
@@ -60,7 +61,8 @@ export function useGameState(scenarios) {
 
     const nextChoices = { ...state.choices, [key]: choiceId }
     const nextHistory = [...state.nodeHistory, historyEntry]
-    const nextValues = calculateLiveProgress(nextHistory)
+    const nextScenarioHistory = [...state.scenarioHistory, historyEntry]
+    const nextValues = calculateLiveProgress(nextScenarioHistory)
     const collapsed =
       choice.collapse === true ||
       (scenario.allowCollapse !== false && isScenarioCollapse(nextValues))
@@ -81,6 +83,7 @@ export function useGameState(scenarios) {
       screen: 'consequence',
       choices: nextChoices,
       nodeHistory: nextHistory,
+      scenarioHistory: nextScenarioHistory,
       consequenceLog: nextLog,
       pendingOutcome: {
         scenarioId: scenario.id,
@@ -110,21 +113,24 @@ export function useGameState(scenarios) {
     const outcome = state.pendingOutcome
     if (!outcome) return
 
+    // Scenario finished (natural end or collapse) → go to per-scenario report
     if (outcome.nextNodeId === 'end_scenario' || outcome.collapsed) {
-      if (state.currentScenarioIndex < scenarios.length - 1) {
-        setState((current) => ({
-          ...current,
-          screen: 'intro',
-          currentScenarioIndex: current.currentScenarioIndex + 1,
-          currentNodeId: scenarios[current.currentScenarioIndex + 1].nodes[0].id,
-          pendingOutcome: null,
-        }))
-        return
-      }
-
       setState((current) => ({
         ...current,
-        screen: 'end',
+        screen: 'scenario_report',
+        pendingOutcome: null,
+      }))
+      return
+    }
+
+    // Scenario still running — find the next node defensively
+    const scenario = scenarios[state.currentScenarioIndex]
+    const nextNode = scenario?.nodes.find((item) => item.id === outcome.nextNodeId)
+    if (!nextNode) {
+      // Defensive: node ID not found → treat as scenario end
+      setState((current) => ({
+        ...current,
+        screen: 'scenario_report',
         pendingOutcome: null,
       }))
       return
@@ -138,9 +144,27 @@ export function useGameState(scenarios) {
     }))
   }
 
+  function advanceFromScenarioReport() {
+    if (state.currentScenarioIndex < scenarios.length - 1) {
+      const nextIndex = state.currentScenarioIndex + 1
+      setState((current) => ({
+        ...current,
+        screen: 'intro',
+        currentScenarioIndex: nextIndex,
+        currentNodeId: scenarios[nextIndex].nodes[0].id,
+        scenarioHistory: [],   // reset per-scenario risk tracker
+      }))
+    } else {
+      setState((current) => ({
+        ...current,
+        screen: 'end',
+      }))
+    }
+  }
+
   function restart() {
     setState(initialState)
   }
 
-  return { state, startGame, finishOnboarding, finishIntro, makeChoice, continueAfterConsequence, restart }
+  return { state, startGame, finishOnboarding, finishIntro, makeChoice, continueAfterConsequence, advanceFromScenarioReport, restart }
 }

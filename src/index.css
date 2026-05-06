@@ -1551,3 +1551,232 @@ button:disabled {
   mix-blend-mode: luminosity;
   transition: background-image 0.8s ease;
 }
+
+/* ── ScenarioReportScreen ── */
+.scenario-report-screen {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.scenario-report-card {
+  width: 100%;
+  max-width: 780px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 36px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
+
+.scenario-report-card.low    { border-color: rgba(74, 222, 128, 0.3); }
+.scenario-report-card.medium { border-color: rgba(250, 204, 21, 0.3); }
+.scenario-report-card.high,
+.scenario-report-card.critical { border-color: rgba(248, 113, 113, 0.3); }
+.scenario-report-card.collapse { border-color: rgba(220, 50, 50, 0.5); }
+
+.report-header { display: flex; flex-direction: column; gap: 10px; }
+
+.report-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.78rem;
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--cyan);
+}
+
+.report-header h2 {
+  margin: 0;
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+
+.report-summary {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Verdict banner */
+.verdict-banner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 20px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.verdict-banner.low    { border-color: rgba(74, 222, 128, 0.2); background: rgba(74, 222, 128, 0.05); }
+.verdict-banner.medium { border-color: rgba(250, 204, 21, 0.2); background: rgba(250, 204, 21, 0.05); }
+.verdict-banner.high,
+.verdict-banner.critical { border-color: rgba(248, 113, 113, 0.2); background: rgba(248, 113, 113, 0.05); }
+.verdict-banner.collapse { border-color: rgba(220, 50, 50, 0.3); background: rgba(220, 50, 50, 0.08); }
+
+.verdict-score {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--cyan);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.verdict-banner > div:nth-child(2) {
+  flex: 1;
+  min-width: 160px;
+}
+
+.verdict-banner strong {
+  display: block;
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+}
+
+.verdict-banner p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.quality-counts {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.count-best       { color: #4ade80; }
+.count-acceptable { color: #facc15; }
+.count-risky      { color: #f87171; }
+
+/* Meters section */
+.report-meters h3 {
+  margin: 0 0 14px;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+}
+
+.report-meter-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.report-meter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+.report-meter-row.exposure { color: var(--text-secondary); }
+.report-meter-row.resilience { color: #4ade80; }
+
+.report-meter-row span { width: 110px; flex-shrink: 0; }
+
+.report-meter-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.report-meter-fill {
+  height: 100%;
+  background: var(--cyan);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.report-meter-row.resilience .report-meter-fill { background: #4ade80; }
+
+.report-meter-row strong {
+  width: 28px;
+  text-align: right;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  flex-shrink: 0;
+}
+
+.report-risk-level {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.risk-badge {
+  font-size: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.risk-badge.low      { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+.risk-badge.medium   { background: rgba(250, 204, 21, 0.15);  color: #facc15; }
+.risk-badge.high,
+.risk-badge.critical { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+.risk-badge.collapse { background: rgba(220, 50, 50, 0.2);    color: #ef4444; }
+
+/* Analysis grid */
+.report-analysis-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.report-tile {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.report-tile strong {
+  display: block;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.report-tile p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Path recap quality colours */
+.path-step.quality-best       { border-left-color: #4ade80; }
+.path-step.quality-acceptable { border-left-color: #facc15; }
+.path-step.quality-risky      { border-left-color: #f87171; }
+.path-step.collapsed          { border-left-color: #ef4444; }
+
+@media (max-width: 600px) {
+  .scenario-report-card { padding: 24px 18px; }
+  .report-analysis-grid { grid-template-columns: 1fr; }
+  .verdict-banner { flex-direction: column; gap: 12px; }
+}
