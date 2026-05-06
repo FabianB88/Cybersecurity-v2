@@ -1,7 +1,7 @@
-import { CheckCircle2, Circle, AlertTriangle } from 'lucide-react'
+import { CheckCircle2, Circle } from 'lucide-react'
 
 export default function ChoiceButton({ choice, selected, disabled, onSelect }) {
-  const Icon = selected ? CheckCircle2 : choice.quality === 'risky' ? AlertTriangle : Circle
+  const Icon = selected ? CheckCircle2 : Circle
 
   return (
     <button className={`choice-button ${selected ? 'selected' : ''}`} disabled={disabled} onClick={() => onSelect(choice.id)}>
