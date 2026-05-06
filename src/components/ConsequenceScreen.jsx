@@ -48,10 +48,12 @@ export default function ConsequenceScreen({ outcome, state, onContinue }) {
       <div className="consequence-layout">
       <LiveRiskPanel state={state} />
       <article className={`consequence-card ${isFinalReport ? 'scenario-finished-card' : ''}`}>
-        <div className="node-eyebrow">
-          <Radio size={15} /> {isFinalReport ? 'Scenario afgesloten' : 'Gevolg van je actie'}
-        </div>
-        <h2>{outcome.nodeTitle}</h2>
+        {!isFinalReport && (
+          <>
+            <div className="node-eyebrow"><Radio size={15} /> Gevolg van je actie</div>
+            <h2>{outcome.nodeTitle}</h2>
+          </>
+        )}
         {isFinalReport && (
           <DossierDebrief outcome={outcome} state={state} values={values} level={level} />
         )}
