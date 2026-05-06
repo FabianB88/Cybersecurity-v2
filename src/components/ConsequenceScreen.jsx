@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Activity, Banknote, Building2, Radio } from 'lucide-react'
+import { ArrowRight, Activity, Banknote, Building2, FileWarning, Network, Radio, TimerReset } from 'lucide-react'
 import LiveRiskPanel from './LiveRiskPanel.jsx'
-import { getScenarioRecap } from '../engine/progressEngine.js'
+import { calculateLiveProgress, getRiskLevel, getScenarioRecap } from '../engine/progressEngine.js'
 
 const qualityCopy = {
   best: {
@@ -22,11 +22,16 @@ const meterLabels = {
   operation: { label: 'Operatie', icon: Activity },
   reputation: { label: 'Reputatie', icon: Building2 },
   financial: { label: 'Financieel', icon: Banknote },
+  legal: { label: 'Juridisch', icon: FileWarning },
+  chain: { label: 'Keten', icon: Network },
+  pressure: { label: 'Druk', icon: TimerReset },
 }
 
 export default function ConsequenceScreen({ outcome, state, onContinue }) {
   const { choice } = outcome
   const quality = qualityCopy[choice.quality] || qualityCopy.acceptable
+  const values = calculateLiveProgress(state.nodeHistory)
+  const level = getRiskLevel(values)
 
   return (
     <motion.section
@@ -84,15 +89,7 @@ export default function ConsequenceScreen({ outcome, state, onContinue }) {
         </div>
 
         {outcome.isScenarioEnd && (
-          <div className="path-recap">
-            <span>Pad dat je hebt ingeslagen</span>
-            {getScenarioRecap(state, outcome.scenarioTitle).map((item, index) => (
-              <div className="path-step" key={`${item.node}-${index}`}>
-                <strong>{item.node}: {item.label}</strong>
-                <p>{item.consequence}</p>
-              </div>
-            ))}
-          </div>
+          <DossierDebrief outcome={outcome} state={state} values={values} level={level} />
         )}
 
         <button className="btn-primary align-right" onClick={onContinue}>
@@ -101,6 +98,66 @@ export default function ConsequenceScreen({ outcome, state, onContinue }) {
       </article>
       </div>
     </motion.section>
+  )
+}
+
+function DossierDebrief({ outcome, state, values, level }) {
+  const recap = getScenarioRecap(state, outcome.scenarioTitle)
+  const theory = outcome.scenarioReflection || {}
+
+  return (
+    <div className="dossier-debrief">
+      <span>Dossierdebrief</span>
+      <h3>Wat is er in dit bedrijf gebeurd?</h3>
+      <p>{theory.summary || 'Je keuzes hebben het incident richting gegeven. Sommige keuzes beperkten verspreiding; andere vergrootten druk, schade of onzekerheid.'}</p>
+
+      <div className="debrief-grid">
+        <div>
+          <strong>Risiconiveau</strong>
+          <p>{level.label}: {level.text}</p>
+        </div>
+        <div>
+          <strong>CIA-koppeling</strong>
+          <p>{theory.cia || `Dit dossier raakt vooral ${outcome.scenarioCia?.join(' en ')}.`}</p>
+        </div>
+        <div>
+          <strong>TBK-bril</strong>
+          <p>{theory.tbk || `Kijk naar ${outcome.scenarioLens}: welk proces, welke afhankelijkheid en welke maatregel zijn bedrijfskundig relevant?`}</p>
+        </div>
+      </div>
+
+      <div className="debrief-grid">
+        <div>
+          <strong>Waar zit de pijn?</strong>
+          <p>Operatie {values.operation}, keten {values.chain}, reputatie {values.reputation}, juridisch {values.legal}, financieel {values.financial}.</p>
+        </div>
+        <div>
+          <strong>Waar zit veerkracht?</strong>
+          <p>Herstelvermogen {values.recovery}, vertrouwen {values.trust}. Een hoog herstelvermogen kan tijdelijke schade acceptabel maken.</p>
+        </div>
+      </div>
+
+      <div className="path-recap">
+        <span>Pad dat je hebt ingeslagen</span>
+        {recap.map((item, index) => (
+          <div className="path-step" key={`${item.node}-${index}`}>
+            <strong>{item.node}: {item.label}</strong>
+            <p>{item.consequence}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="reflection-box">
+        <strong>Reflectie voor je praktijkcasus</strong>
+        <ul>
+          {(theory.questions || [
+            'Welk bedrijfsproces zou bij jullie als eerste stilvallen?',
+            'Welke maatregel verlaagt vooral kans, en welke verlaagt vooral impact?',
+            'Wie mag onder tijdsdruk beslissen om systemen stil te leggen?',
+          ]).map((question) => <li key={question}>{question}</li>)}
+        </ul>
+      </div>
+    </div>
   )
 }
 

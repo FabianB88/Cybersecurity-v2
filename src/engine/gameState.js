@@ -72,6 +72,9 @@ export function useGameState(scenarios) {
       pendingOutcome: {
         scenarioId: scenario.id,
         scenarioTitle: scenario.title,
+        scenarioCia: scenario.cia,
+        scenarioLens: scenario.tbkLens,
+        scenarioReflection: scenario.reflection,
         nodeId: node.id,
         nodeTitle: node.title,
         choice,

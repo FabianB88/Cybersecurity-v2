@@ -650,6 +650,65 @@ button:disabled {
   font-size: 0.76rem;
 }
 
+.risk-level {
+  display: grid;
+  gap: 3px;
+  border-radius: 7px;
+  padding: 10px;
+  background: rgba(8, 11, 15, 0.42);
+  border: 1px solid var(--border);
+}
+
+.risk-level strong {
+  font-size: 1rem;
+}
+
+.risk-level span {
+  color: var(--text-secondary);
+  line-height: 1.45;
+  font-size: 0.78rem;
+}
+
+.risk-level.low {
+  border-color: rgba(0, 212, 255, 0.28);
+}
+
+.risk-level.medium {
+  border-color: rgba(255, 140, 0, 0.38);
+}
+
+.risk-level.high,
+.risk-level.critical {
+  border-color: rgba(255, 68, 68, 0.50);
+  background: rgba(42, 21, 21, 0.36);
+}
+
+.positive-meter-group {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 7px;
+  border-top: 1px solid rgba(48, 54, 61, 0.8);
+  padding-top: 10px;
+}
+
+.positive-risk-row {
+  display: grid;
+  grid-template-columns: 18px 1fr 26px;
+  gap: 8px;
+  align-items: center;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+.positive-risk-row svg {
+  color: var(--cyan);
+}
+
+.positive-risk-row strong {
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+}
+
 .side-section {
   display: grid;
   gap: 10px;
@@ -854,6 +913,66 @@ button:disabled {
   margin-bottom: 14px;
 }
 
+.dossier-debrief {
+  border: 1px solid rgba(0, 212, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(8, 11, 15, 0.48);
+  padding: 18px;
+  margin-bottom: 14px;
+}
+
+.dossier-debrief > span {
+  display: block;
+  color: var(--cyan);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.dossier-debrief h3 {
+  margin: 0 0 8px;
+}
+
+.dossier-debrief p {
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.debrief-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.debrief-grid + .debrief-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.debrief-grid > div,
+.reflection-box {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(22, 27, 34, 0.68);
+  padding: 12px;
+}
+
+.debrief-grid strong,
+.reflection-box strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+
+.reflection-box ul {
+  margin: 8px 0 0;
+  padding-left: 20px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
 .path-recap > span {
   display: block;
   margin-bottom: 10px;
@@ -980,6 +1099,8 @@ button:disabled {
   .end-grid,
   .incident-grid,
   .consequence-layout,
+  .debrief-grid,
+  .debrief-grid + .debrief-grid,
   .node-layout {
     grid-template-columns: 1fr;
   }

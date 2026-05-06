@@ -1,7 +1,7 @@
 import { casusTips, incidentLibrary, blindSpotMessages } from '../content/outcomes.js'
 
 const categories = ['mens', 'proces', 'tech']
-const meterKeys = ['financial', 'reputation', 'operation']
+const meterKeys = ['financial', 'reputation', 'operation', 'legal', 'chain', 'pressure']
 
 export function calculateRiskProfile(nodeHistory) {
   const riskTotals = { mens: 0, proces: 0, tech: 0 }
