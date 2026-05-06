@@ -36,19 +36,25 @@ export default function ConsequenceScreen({ outcome, state, onContinue }) {
   const quality = outcome.collapsed ? qualityCopy.collapse : qualityCopy[choice.quality] || qualityCopy.acceptable
   const values = calculateLiveProgress(state.nodeHistory)
   const level = getRiskLevel(values)
+  const isFinalReport = outcome.isScenarioEnd || outcome.collapsed
 
   return (
     <motion.section
-      className={`screen consequence-screen ${outcome.isScenarioEnd || outcome.collapsed ? 'scenario-finished' : ''}`}
+      className={`screen consequence-screen ${isFinalReport ? 'scenario-finished' : ''}`}
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -18 }}
     >
       <div className="consequence-layout">
       <LiveRiskPanel state={state} />
-      <article className={`consequence-card ${outcome.isScenarioEnd || outcome.collapsed ? 'scenario-finished-card' : ''}`}>
-        <div className="node-eyebrow"><Radio size={15} /> Gevolg van je actie</div>
+      <article className={`consequence-card ${isFinalReport ? 'scenario-finished-card' : ''}`}>
+        <div className="node-eyebrow">
+          <Radio size={15} /> {isFinalReport ? 'Scenario afgesloten' : 'Gevolg van je actie'}
+        </div>
         <h2>{outcome.nodeTitle}</h2>
+        {isFinalReport && (
+          <DossierDebrief outcome={outcome} state={state} values={values} level={level} />
+        )}
         <div className="chosen-action">
           <span>Je koos</span>
           <strong>{choice.label}</strong>
@@ -97,7 +103,7 @@ export default function ConsequenceScreen({ outcome, state, onContinue }) {
           )}
         </div>
 
-        {(outcome.isScenarioEnd || outcome.collapsed) && (
+        {!isFinalReport && (outcome.isScenarioEnd || outcome.collapsed) && (
           <DossierDebrief outcome={outcome} state={state} values={values} level={level} />
         )}
 
