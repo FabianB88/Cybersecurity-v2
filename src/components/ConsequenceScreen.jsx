@@ -125,7 +125,7 @@ function DossierDebrief({ outcome, state, values, level }) {
   return (
     <div className={`dossier-debrief ${outcome.collapsed ? 'collapse' : level.className}`}>
       <div className="debrief-hero">
-        <span><FileCheck2 size={16} /> Eindrapport scenario</span>
+        <span><FileCheck2 size={16} /> Scenario afgesloten</span>
         <h3>{outcome.collapsed ? outcome.collapseTitle : `Dossier ${outcome.scenarioTitle} afgerond`}</h3>
         <p>{outcome.collapsed ? outcome.collapseText : theory.summary || 'Je keuzes hebben het incident richting gegeven. Sommige keuzes beperkten verspreiding; andere vergrootten druk, schade of onzekerheid.'}</p>
       </div>
